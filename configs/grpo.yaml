@@ -1,0 +1,16 @@
+# Trajectory-level GRPO over one pass of the real training episodes (11,035).
+sft_checkpoint: checkpoints/sft-real-synth
+pool: real
+k: 4
+temperature: 0.8
+max_new_tokens: 64
+kl_coef: 0.04
+clip_eps: 0.2
+ppo_epochs: 2
+episodes_per_batch: 8
+grad_accum: 4
+lr: 5.0e-5
+lora_r: 16
+lora_alpha: 32
+lora_dropout: 0.05
+snapshot_every_batches: 125  # every 1,000 episodes

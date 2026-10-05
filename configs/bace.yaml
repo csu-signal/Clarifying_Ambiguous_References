@@ -1,0 +1,24 @@
+# BACE: warm start on 150 episodes, then 8 RL iterations of 20 episodes.
+sft_checkpoint: checkpoints/sft-real-synth
+pool: real
+k: 2
+temperature_low: 0.8
+psi0: belief
+belief_sizes: exact
+exact_feature: false
+warm_start_episodes: 150
+warm_start_mc: 2
+warm_start_epochs: 6
+warm_start_gap_weight: 1.0
+iterations: 8
+episodes_per_iteration: 20
+critic_updates_per_iteration: 200
+critic_batch_size: 4
+temperature_high: 0.5
+epsilon: 0.15
+mc_weight: 0.5
+target_sync_every: 50
+target_tau: 1.0
+critic_lr: 1.0e-3
+critic_lora_lr: 1.0e-4
+snapshot_every_iterations: 1

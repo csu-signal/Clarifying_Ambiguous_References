@@ -1,0 +1,13 @@
+# SFT on real + anchored synthetic episodes. Every RL method starts from this checkpoint.
+pool: real+synth
+seed: 0
+budget: 3
+max_len: 1280
+batch_size: 4
+grad_accum: 4
+epochs: 1
+lr: 1.0e-4
+lora_r: 16
+lora_alpha: 32
+lora_dropout: 0.05
+snapshot_every_steps: 300

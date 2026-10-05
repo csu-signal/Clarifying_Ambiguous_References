@@ -1,0 +1,7 @@
+__pycache__/
+*.egg-info/
+.venv/
+data/simmc2/
+checkpoints/
+results/
+*.png

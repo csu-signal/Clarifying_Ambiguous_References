@@ -1,0 +1,22 @@
+# ArCHer over one pass of the real training episodes: 28 iterations of 394 episodes.
+sft_checkpoint: checkpoints/sft-real-synth
+pool: real
+iterations: 28
+episodes_per_iteration: 394
+critic_updates_per_iteration: 800
+critic_batch_size: 4
+actor_warmup_iters: 10
+actor_updates_per_iteration: 3
+actor_grad_accum: 4
+actor_kl_coef: 0.04
+sft_decides_during_warmup: true
+temperature_high: 0.5
+temperature_low: 0.8
+epsilon: 0.15
+actor_lr: 5.0e-5
+critic_lr: 1.0e-3
+critic_lora_lr: 1.0e-4
+baseline_lr: 1.0e-3
+buffer_capacity: 5000
+target_tau: 0.005
+snapshot_every_iterations: 4

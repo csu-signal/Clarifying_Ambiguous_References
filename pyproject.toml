@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "promcr"
+version = "1.0.0"
+description = "Learning when to ask instead of answering in interactive coreference resolution (SIMMC 2.1)"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "torch>=2.7",
+    "transformers>=5.0",
+    "peft>=0.20",
+    "accelerate",
+    "safetensors",
+    "numpy",
+    "pyyaml",
+    "matplotlib",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
