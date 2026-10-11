@@ -6,7 +6,7 @@ set -euo pipefail
 DEVICE="${1:-cuda:0}"
 SEEDS=(0 1 7 17 123)
 
-for policy in natural-behavior direct-answer ask-once uncertainty-gated procot; do
+for policy in natural-behavior direct-answer ask-once ask-until-resolved uncertainty-gated procot; do
     for split in dev devtest; do
         python -m promcr.evaluation.evaluate --policy "$policy" --split "$split" --device "$DEVICE"
     done

@@ -10,7 +10,7 @@ Episodes come from SIMMC 2.1. Every method runs on Qwen2.5-7B-Instruct; the
 trained ones add LoRA adapters. The repository covers:
 
 - the data pipeline, from the raw SIMMC 2.1 files to episodes and training pools;
-- the untrained policies: Natural Behavior and four prompted variants;
+- the untrained policies: Natural Behavior and five prompted variants;
 - the trained methods: SFT, trajectory-level GRPO, ArCHer, and BACE (a
   value-based chooser over the SFT model's own question and answer);
 - the evaluation: metrics, calibration and critic diagnostics, confidence

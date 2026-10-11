@@ -55,10 +55,10 @@ def load_policy(checkpoint: Path, method: str, budget: int, device: str):
 
 def load_prompted(name: str, budget: int, device: str):
     from ..models.backbone import load_backbone
-    from ..policies.prompted import PROMPTED_POLICIES, UncertaintyGatedPolicy
+    from ..policies.prompted import PROMPTED_POLICIES, AskUntilResolvedPolicy, UncertaintyGatedPolicy
     backbone = load_backbone(device)
     cls = PROMPTED_POLICIES[name]
-    return cls(backbone, budget=budget) if cls is UncertaintyGatedPolicy else cls(backbone)
+    return cls(backbone, budget=budget) if cls in (AskUntilResolvedPolicy, UncertaintyGatedPolicy) else cls(backbone)
 
 
 def evaluate(policy, split: str, out: Path, budget: int = BUDGET, lambda_penalty: float = LAMBDA,
@@ -99,7 +99,8 @@ def main(argv: list[str] | None = None) -> None:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     what = parser.add_mutually_exclusive_group(required=True)
     what.add_argument("--checkpoint", type=Path)
-    what.add_argument("--policy", choices=("natural-behavior", "direct-answer", "ask-once", "uncertainty-gated", "procot"))
+    what.add_argument("--policy", choices=("natural-behavior", "direct-answer", "ask-once", "ask-until-resolved",
+                                           "uncertainty-gated", "procot"))
     parser.add_argument("--method", choices=METHODS, help="override the method read from the checkpoint")
     parser.add_argument("--snapshots", action="store_true", help="also evaluate every checkpoint under snapshots/")
     parser.add_argument("--split", default="dev", choices=("dev", "devtest"))

@@ -1,4 +1,4 @@
-"""Untrained policies on the instruct model: Natural Behavior and four prompted variants.
+"""Untrained policies on the instruct model: Natural Behavior and five prompted variants.
 
 Every policy implements `act(episode, observation, candidate_ids, asks_used)`.
 `candidate_ids` is always the episode's full candidate list, never the
@@ -108,6 +108,29 @@ class AskOncePolicy:
         return Answer(parse_referent(text, candidate_ids))
 
 
+class AskUntilResolvedPolicy:
+    """Always asks on its first turn, then keeps asking while its probability
+    for the top candidate is below `threshold` and questions remain. Once the
+    budget is spent it answers with its own best guess, rather than asking
+    into the environment's forced answer."""
+
+    def __init__(self, backbone: Backbone, budget: int = BUDGET, threshold: float = 0.6) -> None:
+        self.backbone = backbone
+        self.budget = budget
+        self.threshold = threshold
+
+    def act(self, episode: Episode, observation: str, candidate_ids: list[int], asks_used: int) -> Action:
+        if asks_used >= self.budget:
+            text = self.backbone.chat(f"{_ANSWER_AFTER_ASKING}\n\n{observation}", max_new_tokens=16)
+            return Answer(parse_referent(text, candidate_ids))
+        if asks_used > 0:
+            best_id, best_prob = max(referent_confidence(self.backbone, observation, candidate_ids).items(),
+                                     key=lambda item: item[1])
+            if best_prob >= self.threshold:
+                return Answer(best_id)
+        return Ask(*resolve_ask(generate_ask_question(self.backbone, observation)))
+
+
 class UncertaintyGatedPolicy:
     """Asks while its probability for the top candidate is below `threshold`."""
 
@@ -150,6 +173,7 @@ PROMPTED_POLICIES = {
     "natural-behavior": NaturalBehaviorPolicy,
     "direct-answer": DirectAnswerPolicy,
     "ask-once": AskOncePolicy,
+    "ask-until-resolved": AskUntilResolvedPolicy,
     "uncertainty-gated": UncertaintyGatedPolicy,
     "procot": ProCoTPolicy,
 }
